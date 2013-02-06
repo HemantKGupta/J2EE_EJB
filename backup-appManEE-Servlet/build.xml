@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- http://localhost:8080/applicationManagedEE/LoginServlet-->
+
+<project name="example" default="deploy_ear"> 
+
+ 
+    
+    <target name="init">
+        <property name="example_name" value="applicationManagedEE" />
+     </target>
+	
+	<target name="setup">
+        <mkdir dir="build/model"/>
+        <mkdir dir="build/servlet/WEB-INF/classes"/>
+        <mkdir dir="dist"/>        
+    </target>
+	
+	<!-- Build classpath -->
+    <path id="model-classpath">
+        <fileset dir="C:/glassfish/lib">
+            <include name="javaee.jar"/>
+        </fileset>
+    </path>
+  
+    <property name="model.classpath" refid="model-classpath"/>
+
+	<target name="build_ear" depends="init,setup,build_jar,build_war">
+        <jar jarfile="dist/${example_name}.ear" update="yes">
+            <fileset file="dist/${example_name}.war"/>
+            <fileset file="dist/${example_name}.jar"/>
+        </jar>
+    </target>
+	
+	<target name="build_jar" depends="init,setup" >
+        <javac srcdir="src/model" destdir="build/model" debug="on">
+            <classpath refid="model-classpath"/>
+        </javac>
+        <copy todir="build/model" failonerror="false">
+            <fileset dir="etc/persistence"/>
+        </copy>
+        <jar jarfile="dist/${example_name}.jar" update="yes">
+            <fileset dir="build/model"/>
+        </jar>
+    </target>
+
+    <target name="build_war" depends="init,setup" >
+        <javac srcdir="src/servlet" destdir="build/servlet/WEB-INF/classes" debug="on">
+            <classpath>
+               <pathelement path="${model.classpath}" />
+               <pathelement location="dist/${example_name}.jar" />
+            </classpath>
+        </javac>
+        <jar jarfile="dist/${example_name}.war" update="yes">
+            <fileset dir="build/servlet"/>
+            <fileset dir="etc/web"/>
+        </jar>
+    </target>	
+	<target name="deploy_ear" depends="build_ear,init" >
+		        <exec executable="C:/glassfish/bin/asadmin" failonerror="true" vmlauncher="false">
+		            <arg line="deploy --user admin dist/${example_name}.ear"/>
+		        </exec>
+		    </target>
+
+	
+	<target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+</project>

@@ -1,0 +1,37 @@
+<ejb-jar
+       xmlns="http://java.sun.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                           http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd"
+       version="3.0">
+       <enterprise-beans>
+<message-driven>
+<ejb-name>ReportProcessorBean</ejb-name>
+<mapped-name>destinationQueue</mapped-name>
+<ejb-class>examples.mdb.ReportProcessorBean</ejb-class>
+<messaging-type>javax.jms.MessageListener</messaging-type>
+<transaction-type>Container</transaction-type>
+<message-destination-type>javax.jms.Queue</message-destination-type>
+<activation-config>
+<activation-config-property>
+<activation-config-property-name>destinationType </activation-config-property-name>
+<activation-config-property-value>javax.jms.Queue </activation-config-property-value>
+</activation-config-property>
+<activation-config-property>
+<activation-config-property-name>messageSelector </activation-config-property-name>
+<activation-config-property-value>RECIPIENT='ReportProcessor'</activation-config-property-value>
+</activation-config-property>
+</activation-config>
+</message-driven>
+</enterprise-beans>
+       
+   
+          
+    
+     
+   
+   
+
+</ejb-jar>
+
+

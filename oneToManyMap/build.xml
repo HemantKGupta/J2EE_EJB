@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- http://localhost:8080/fa/EmployeeServlet-->
+
+<project name="example" default="deploy_ear">
+ 
+      
+	<target name="init">
+        <property name="example_name" value="oneToManyMap" />
+    </target>
+	
+	<target name="setup">
+        <mkdir dir="build/model"/>
+        <mkdir dir="build/servlet/WEB-INF/classes"/>
+        <mkdir dir="dist"/>
+    </target>
+	
+	<path id="j2ee-classpath">
+        <fileset dir="C:/glassfish/lib">
+            <include name="javaee.jar"/>
+        </fileset>
+  </path>
+  <property name="j2ee.classpath" refid="j2ee-classpath"/>
+	
+	<target name="build_ear" depends="init,setup,build_jar,build_war">
+        <jar jarfile="dist/${example_name}.ear" update="yes">
+            <fileset file="dist/${example_name}.war"/>
+            <fileset file="dist/${example_name}.jar"/>
+        	<fileset dir="etc/app"/>
+        </jar>
+    </target>
+	
+	<target name="build_jar" depends="setup" >
+        <javac srcdir="src/model" destdir="build/model" debug="on">
+            <classpath>
+               <pathelement path="${j2ee.classpath}" />
+            </classpath>
+        </javac>
+       
+        <jar jarfile="dist/${example_name}.jar" update="yes">
+            <fileset dir="build/model"/>
+        	 <fileset dir="etc/ejb"/>
+        </jar>
+    </target>
+	
+	<target name="build_war" depends="setup" >
+        <javac srcdir="src/servlet" destdir="build/servlet/WEB-INF/classes" debug="on">
+            <classpath>
+               <pathelement path="${j2ee.classpath}" />
+               <pathelement location="dist/${example_name}.jar" />
+            </classpath>
+        </javac>
+        <jar jarfile="dist/${example_name}.war" update="yes">
+            <fileset dir="build/servlet"/>
+            <fileset dir="etc/web"/>
+        </jar>
+    </target>	
+	
+	<target name="deploy_ear" depends="build_ear,init" >
+	        <exec executable="C:/glassfish/bin/asadmin" failonerror="true" vmlauncher="false">
+	            <arg line="deploy --user admin dist/${example_name}.ear"/>
+	        </exec>
+	    </target>
+
+	    
+	<target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+</project>

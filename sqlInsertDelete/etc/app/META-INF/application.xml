@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" version="5"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/application_5.xsd" >
+<display-name>MyWorkEAR</display-name>
+<module>
+<web>
+<web-uri>sqlInsertDelete.war</web-uri>
+<context-root>sid</context-root>>
+</web>
+</module>
+<module>
+<ejb>sqlInsertDelete.jar</ejb>
+</module>
+</application>
