@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project name="example" default="run_client">
+ 
+      <target name="init">
+        <property name="example_name" value="applicationManagedSE" />
+        
+    </target>
+	
+	<target name="setup">
+        <mkdir dir="build/model"/>
+        <mkdir dir="build/client"/>
+        <mkdir dir="dist"/>
+        
+    </target>
+	
+	<path id="model-classpath">
+        <fileset dir="C:/glassfish/lib">
+            <include name="javaee.jar"/>
+        </fileset>
+  </path>
+  <property name="model.classpath" refid="model-classpath"/>
+  
+  <path id="client-classpath">
+        <fileset dir="C:/glassfish/lib">
+            <include name="javaee.jar"/>
+			<include name="toplink-essentials.jar"/>
+        </fileset>
+		<fileset dir="C:/glassfish/javadb/lib">
+            <include name="derbyclient.jar"/>
+		</fileset>
+  </path>
+  <property name="client.classpath" refid="client-classpath"/>
+
+    <target name="build_client_jar" depends="setup,build_ear">
+         <javac srcdir="src/client" destdir="build/client" debug="on">
+            <classpath>
+               <pathelement path="${model.classpath}" />
+               <pathelement location="dist/${example_name}.jar" />
+            </classpath>
+        </javac>
+        <jar jarfile="dist/${example_name}_client.jar" update="yes">
+            <fileset dir="build/client"/>
+        </jar>
+    </target>
+	
+	    <target name="build_ear" depends="init,setup" >
+        <javac srcdir="src/model" destdir="build/model" debug="on">
+            <classpath refid="model-classpath"/>
+        </javac>
+        <copy todir="build/model" failonerror="false">
+            <fileset dir="etc/persistence"/>
+        </copy>
+        <jar jarfile="dist/${example_name}.ear" update="yes">
+            <fileset dir="build/model"/>
+        </jar>
+    </target>
+	<target name="deploy_ear" depends="build_ear,init" >
+		        <exec executable="C:/glassfish/bin/asadmin" failonerror="true" vmlauncher="false">
+		            <arg line="deploy --user admin dist/${example_name}.ear"/>
+		        </exec>
+		    </target>
+	
+    <target name="run_client" depends="build_client_jar">
+	<java classname="examples.client.EmployeeClient" fork="true">
+            <classpath>
+                <fileset dir="dist">
+                    <include name="*.jar"/>
+                </fileset>
+                <pathelement path="${client.classpath}"/>
+            </classpath>
+        </java>
+    </target>
+	
+</project>
