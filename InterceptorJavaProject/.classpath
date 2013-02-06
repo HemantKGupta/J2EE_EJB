@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="srcs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/jboss-4.0.5.GA/client/jboss-j2ee.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

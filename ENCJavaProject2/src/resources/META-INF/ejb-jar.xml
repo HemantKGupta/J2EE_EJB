@@ -1,0 +1,28 @@
+<ejb-jar
+       xmlns="http://java.sun.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                           http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd"
+       version="3.0">
+       
+       <enterprise-beans>
+      <session>
+         <ejb-name>TravelAgentBean</ejb-name>
+         <ejb-local-ref>
+            <ejb-ref-name>ejb/Another</ejb-ref-name>
+            <ejb-ref-type>Session</ejb-ref-type>
+            <local>com.titan.travelagent.AnotherLocal</local>
+            <ejb-link>AnotherBean</ejb-link>
+            <injection-target>
+               <injection-target-class>
+                   com.titan.travelagent.TravelAgentBean
+               </injection-target-class>
+               <injection-target-name>ar</injection-target-name>
+            </injection-target>
+          </ejb-local-ref>
+        </session>
+   </enterprise-beans>
+       
+   
+</ejb-jar>
+
